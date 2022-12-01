@@ -1,19 +1,19 @@
 # https://adventofcode.com/2022/day/1
 
-$Input = Get-Content -Path $PSScriptRoot\day01_input.txt
+$Text = Get-Content -Path $PSScriptRoot\day01_input.txt
 
 [System.Collections.ArrayList]$ElvesMap = @()
 
 $ElvesCount = 1
 $TempCalories = 0
 
-for($i = 0; $i -lt $Input.Length; $i++)
+for($i = 0; $i -lt $Text.Length; $i++)
 {
-    $Calories = [int]$Input[$i]
+    $Calories = [int]$Text[$i]
 
     $TempCalories += $Calories
 
-    if($Calories -eq 0 -or $i -eq ($Input.Length -1)) {
+    if($Calories -eq 0 -or $i -eq ($Text.Length -1)) {
         [void]$ElvesMap.Add([pscustomobject] @{
             Elf = $ElvesCount            
             Calories = $TempCalories

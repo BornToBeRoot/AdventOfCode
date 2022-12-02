@@ -6,23 +6,17 @@ function getRound2Value($o, $m) {
     }
 }
 
-[System.Collections.ArrayList]$Strategie = @{}
-
 foreach($Line in Get-Content -Path $PSScriptRoot\day02_input.txt) {
     $Split = $Line.Split(" ")
-    [void]$Strategie.Add([pscustomobject]@{
-        Opponent = ([Int][Char]$Split[0] - 64)
-        Me = getRound2Value ([Int][Char]$Split[0] - 64) ([Int][Char]$Split[1] - 87)
-    })
-}
+    $Opponent = ([Int][Char]$Split[0] - 64)
+    $Me = getRound2Value ([Int][Char]$Split[0] - 64) ([Int][Char]$Split[1] - 87)
 
-foreach($Round in $Strategie) {
     # Base
-    $TotalSum += $Round.Me
+    $TotalSum += $Me
     
     # Draw
     # O = M       
-    if($Round.Opponent -eq $Round.Me) {
+    if($Opponent -eq $Me) {
         $TotalSum += 3
         continue
     }
@@ -32,9 +26,9 @@ foreach($Round in $Strategie) {
     # 1 - 2 = -1
     # 2 - 3 = -1
     # 3 - 1 = 2
-    $x = $Round.Opponent - $Round.Me
+    $x = $Opponent - $Me
 
-    if(($x -eq -1) -or ($x -eq 2 -and $Round.Me -eq 1)) {
+    if(($x -eq -1) -or ($x -eq 2 -and $Me -eq 1)) {
         $TotalSum += 6
     }
 }

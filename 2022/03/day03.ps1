@@ -1,0 +1,24 @@
+$Text = Get-Content -Path $PSScriptRoot\day03_input.txt
+
+$TotalSum = 0
+
+foreach ($Bag in $Text) {
+    $Offset = $Bag.Length / 2
+
+    $Part1 = $Bag.Substring(0, $Offset)
+    $Part2 = $Bag.Substring($Offset, $Offset)
+
+    [System.Collections.ArrayList]$CharValues = @()
+
+    $Part1.ToCharArray() | ForEach-Object {        
+        if ($Part2.Contains($_)) {            
+            $Ascii = ($_ -cmatch "[A-Z]") ? 38 : 96
+                 
+            [void]$CharValues.Add([Int]$_ - $Ascii)
+        }               
+    }    
+
+    $CharValues | Get-Unique | ForEach-Object { $TotalSum += $_ }
+}
+
+$TotalSum

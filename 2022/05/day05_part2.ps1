@@ -8,14 +8,13 @@ $ParseCount = 0
 # Parse input
 foreach ($Line in $Text) {
     if ($ParseCount -eq 0 -and ![String]::IsNullOrEmpty($Line)) {
-        if ($Line.Contains("[")) {              
-            $LineParsed = $Line.Replace("]         [", ",,,").Replace("]     [", ",,").Replace("        ", ",,").Replace("    [", ",").Replace("]    ", ",").Replace("] [", ",").Replace("]", "").Replace("[", "").Replace(" ", "").Trim()
+        $x = ""
+
+        for($i = 1; $i -lt $line.Length; $i += 4) {
+            $x += "$($line.ToCharArray()[$i]),"         
         }
-        else {
-            $LineParsed = $Line.Replace("   ", ",").Trim()
-        }       
         
-        [void]$InputText.Add($LineParsed)
+        [void]$InputText.Add($x.TrimEnd(','))
     }
 
     if ($ParseCount -eq 1 -and ![String]::IsNullOrEmpty($Line)) {
@@ -24,7 +23,7 @@ foreach ($Line in $Text) {
 
     if ([String]::IsNullOrEmpty($Line)) {
         $ParseCount++        
-    }
+    }    
 }
 
 # Create 2 dimensional array
@@ -40,7 +39,7 @@ for ($i = 0; $i -lt $InputCount; $i++) {
         # Add each char
         foreach ($t in $InputText[$y].Split(",")[$i]) {     
             # Check for content       
-            if (-not[String]::IsNullOrEmpty($t)) {
+            if ($t -ne " ") {
                 [void]$InputArraySub.Add($t)
             }
         }        
@@ -58,9 +57,9 @@ foreach ($ActionSplit in $ActionText) {
     $NewIndex = $Action[2] - 1    
     $StartIndex = $InputArray[$OldIndex].Count - $Action[0]
 
-    $TempItems = $InputArray[$OldIndex].GetRange($StartIndex, $Action[0])    
-    $InputArray[$NewIndex].AddRange($TempItems)        
-    [void]$InputArray[$OldIndex].RemoveRange($StartIndex, $Action[0])   
+    $TempItems = $InputArray[$OldIndex].GetRange($StartIndex, $Action[0])
+    $InputArray[$NewIndex].AddRange($TempItems)
+    [void]$InputArray[$OldIndex].RemoveRange($StartIndex, $Action[0])
 }
 
 # Output

@@ -14,7 +14,7 @@ foreach ($Line in  Get-Content -Path $PSScriptRoot\day07_input.txt) {
     elseif (-not $Line.StartsWith("$")) {
         $FileOrDir = $Line.Trim().Split(" ")
 
-        if ($FileOrDir -match "^\d+$") {
+        if ($FileOrDir[0] -match "^\d+$") {
             $FileSize = [int]$FileOrDir[0]
 
             $TempFolder = ""

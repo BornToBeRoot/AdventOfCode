@@ -1,5 +1,4 @@
 [System.Collections.ArrayList]$Folders = @()
-
 $CurrentFolder = ""
 
 foreach ($Line in  Get-Content -Path $PSScriptRoot\day07_input.txt) {
@@ -7,15 +6,9 @@ foreach ($Line in  Get-Content -Path $PSScriptRoot\day07_input.txt) {
         $CommandArray = $Line.Split(" ")
 
         switch ($CommandArray[2]) {
-            "/" {
-                $CurrentFolder = $CommandArray[2]
-            }
-            ".." {          
-                $CurrentFolder = $CurrentFolder.Substring(0, $CurrentFolder.TrimEnd("/").LastIndexOf("/")) + "/"
-            }
-            default {
-                $CurrentFolder += $CommandArray[2] + "/"
-            }
+            "/" { $CurrentFolder = $CommandArray[2] }
+            ".." { $CurrentFolder = $CurrentFolder.Substring(0, $CurrentFolder.TrimEnd("/").LastIndexOf("/")) + "/" }
+            default { $CurrentFolder += $CommandArray[2] + "/" }
         }       
     }
     elseif (-not $Line.StartsWith("$")) {
@@ -30,30 +23,26 @@ foreach ($Line in  Get-Content -Path $PSScriptRoot\day07_input.txt) {
                 $TempFolder += $Sub + "/"
                 $x = $Folders | Where-Object { $_.Folder -eq $TempFolder }
 
-                if ($null -eq $x) {                    
-                    [void]$Folders.Add([pscustomobject]@{
-                            Folder = $TempFolder
-                            Size   = $FileSize
-                        })
+                $TempSize = $FileSize
+
+                if ($null -ne $x) {
+                    $TempSize += $x.Size
+                    [void]$Folders.Remove($x)                    
                 }
-                else {                                        
-                    [void]$Folders.Remove($x)
-                    [void]$Folders.Add([pscustomobject]@{
-                            Folder = $TempFolder
-                            Size   = $x.Size + $FileSize
-                        })
-                }
+
+                [void]$Folders.Add([pscustomobject]@{
+                        Folder = $TempFolder
+                        Size   = $TempSize
+                    })
             }           
         }
     }
 }
 
-$TotalSum = 0
+# Part 1
+($Folders | Where-Object { $_.Size -le 100000 } | Measure-Object -Sum Size).Sum
 
-foreach ($Folder in $Folders) {
-    if ($Folder.Size -lt 100000) {
-        $TotalSum += $Folder.Size
-    }
-}
-
-$TotalSum
+# Part 2
+$DiffFreeSpace = 70000000 - ($Folders | Where-Object { $_.Folder -eq "/" }).Size
+$RequiredSpace = (30000000 - $DiffFreeSpace)
+($Folders | Where-Object { $_.Size -ge $RequiredSpace } | Sort-Object -Property Size | Select-Object -First 1).Size

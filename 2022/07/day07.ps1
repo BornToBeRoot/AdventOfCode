@@ -25,6 +25,7 @@ foreach ($Line in  Get-Content -Path $PSScriptRoot\day07_input.txt) {
 
                 $TempSize = $FileSize
 
+                # Remove existing entry / update
                 if ($null -ne $x) {
                     $TempSize += $x.Size
                     [void]$Folders.Remove($x)                    

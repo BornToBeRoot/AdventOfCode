@@ -15,7 +15,7 @@ foreach ($Line in Get-Content -Path $PSScriptRoot\day08_input.txt) {
 
 # Ignore borders, so we can ignore the first and last row and column 
 # when iterating over the array
-$VisibleTrees = ($Row.Count * 2) + ($Row[0].Count * 2) - 4
+$VisibleTreesScore = ($Row.Count * 2) + ($Row[0].Count * 2) - 4
 
 $TreeScenicScore = 0
 
@@ -72,7 +72,7 @@ for ($i = 1; $i -lt $Row.Count - 1; $i++) {
 
         # Check if tree is visible
         if ($LeftVisible -or $TopVisible -or $RightVisible -or $BotVisible) {
-            $VisibleTrees++
+            $VisibleTreesScore++
         }
 
         # Check scenic score        
@@ -84,5 +84,5 @@ for ($i = 1; $i -lt $Row.Count - 1; $i++) {
     }    
 }
 
-Write-Host "Part 1: $VisibleTrees"
+Write-Host "Part 1: $VisibleTreesScore"
 Write-Host "Part 2: $TreeScenicScore"

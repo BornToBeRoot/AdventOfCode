@@ -18,9 +18,9 @@ $VisibleTrees = ($Row.Count * 2) + ($Row[0].Count * 2) - 4
 # Go through each row
 for ($i = 1; $i -lt $Row.Count - 1; $i++) {
     # Go through each column
-    :outer for ($y = 1; $y -lt $Row[$i].Count - 1; $y++) {
+    for ($y = 1; $y -lt $Row[$i].Count - 1; $y++) {
         $CurrentTree = $Row[$i][$y]
-        Write-Host "Current tree is [$i,$y] with value $CurrentTree"
+        #Write-Host "Current tree is [$i,$y] with value $CurrentTree"
 
         # Left
         $LeftVisible = $true

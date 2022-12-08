@@ -1,3 +1,5 @@
+# https://adventofcode.com/2022/day/6
+
 $Chars = (Get-Content -Path $PSScriptRoot\day06_input.txt).ToCharArray()
 
 for ($i = 0; $i -lt $Chars.Length; $i++) {

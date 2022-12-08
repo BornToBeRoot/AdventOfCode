@@ -1,3 +1,5 @@
+# https://adventofcode.com/2022/day/2
+
 $Text = Get-Content -Path $PSScriptRoot\day02_input.txt
 
 [System.Collections.ArrayList]$Strategie = @{}

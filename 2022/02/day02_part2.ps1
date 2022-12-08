@@ -1,3 +1,5 @@
+# https://adventofcode.com/2022/day/2
+
 function getRound2Value($o, $m) {
     switch ($m) {
         1 { $o - 1 -eq 0 ? 3 : $o - 1 }

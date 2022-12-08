@@ -1,3 +1,5 @@
+# https://adventofcode.com/2022/day/3
+
 $Text = Get-Content -Path $PSScriptRoot\day03_input.txt
 
 $TotalSum = 0

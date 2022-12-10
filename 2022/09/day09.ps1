@@ -1,98 +1,57 @@
-[System.Collections.ArrayList]$Commands = @()
+# https://adventofcode.com/2022/day/9
 
-foreach($Line in Get-Content -Path $PSScriptRoot\day09_input.ps1) {
-    $LineValues = $Line.Trim().Split(" ")
-    [void]$Commands.Add([pscustomobject]@{
-        Direction = $LineValues[0]
-        Value = [int]$LineValues[1]
-    })
-}
+# Repeat for each part
+foreach ($Part in @(2, 10)) {
+    
+    # Init hash set for positions
+    [System.Collections.Generic.HashSet[String]]$Positions = @()
 
-[System.Collections.Generic.HashSet[String]]$TailPositions = @()
+    # Init array list with knots
+    [System.Collections.ArrayList]$Knots = @()
 
-$CurrentH_Y = 0
-$CurrentH_X = 0
-
-$CurrentT_Y = 0
-$CurrentT_X = 0
-
-foreach($Command in $Commands) {
-    #Write-Host "Direction $($Command.Direction), Value $($Command.Value)"
-
-    switch($Command.Direction) {
-        "R" {
-            for($i = 0; $i -lt $Command.Value; $i++) {
-                $CurrentH_Y_Temp = $CurrentH_Y
-                $CurrentH_X_Temp = $CurrentH_X
-                
-                $CurrentH_X++
-
-                if(($CurrentH_X - $CurrentT_X) -eq 2) {
-                    $CurrentT_Y = $CurrentH_Y_Temp
-                    $CurrentT_X = $CurrentH_X_Temp
-                }
-
-                [void]$TailPositions.Add("[$CurrentT_Y,$CurrentT_X]")
-
-                #Write-Host "Current H [$CurrentH_Y, $CurrentH_X]"
-                #Write-Host "Current T [$CurrentT_Y, $CurrentT_X]"
-            }
-        }
-        "L" {
-            for($i = 0; $i -lt $Command.Value; $i++) {
-                $CurrentH_Y_Temp = $CurrentH_Y
-                $CurrentH_X_Temp = $CurrentH_X
-                                
-                $CurrentH_X--
-
-                if(($CurrentH_X - $CurrentT_X) -eq -2) {
-                    $CurrentT_Y = $CurrentH_Y_Temp
-                    $CurrentT_X = $CurrentH_X_Temp
-                }
-
-                [void]$TailPositions.Add("[$CurrentT_Y,$CurrentT_X]")
-
-                #Write-Host "Current H [$CurrentH_Y, $CurrentH_X]"
-                #Write-Host "Current T [$CurrentT_Y, $CurrentT_X]"
-            }            
-        }
-        "U" {
-            for($i = 0; $i -lt $Command.Value; $i++) {
-                $CurrentH_Y_Temp = $CurrentH_Y
-                $CurrentH_X_Temp = $CurrentH_X
-
-                $CurrentH_Y++
-
-                if(($CurrentH_Y - $CurrentT_Y) -eq 2) {
-                    $CurrentT_Y = $CurrentH_Y_Temp
-                    $CurrentT_X = $CurrentH_X_Temp
-                }
-
-                [void]$TailPositions.Add("[$CurrentT_Y,$CurrentT_X]")
-
-                #Write-Host "Current H [$CurrentH_Y, $CurrentH_X]"
-                #Write-Host "Current T [$CurrentT_Y, $CurrentT_X]"
-            }
-        }
-        "D" {
-            for($i = 0; $i -lt $Command.Value; $i++) {
-                $CurrentH_Y_Temp = $CurrentH_Y
-                $CurrentH_X_Temp = $CurrentH_X
-                
-                $CurrentH_Y--
-
-                if(($CurrentH_Y - $CurrentT_Y) -eq -2) {
-                    $CurrentT_Y = $CurrentH_Y_Temp
-                    $CurrentT_X = $CurrentH_X_Temp
-                }
-                
-                [void]$TailPositions.Add("[$CurrentT_Y,$CurrentT_X]")
-
-                #Write-Host "Current H [$CurrentH_Y, $CurrentH_X]"
-                #Write-Host "Current T [$CurrentT_Y, $CurrentT_X]"
-            }
-        }
+    for ($i = 0; $i -lt $Part; $i++) {
+        [void]$Knots.Add([pscustomobject]@{            
+                Y = 0
+                X = 0
+            })
     }
-}
 
-$TailPositions.Count
+    # Go through each line in input file
+    foreach ($Line in Get-Content -Path $PSScriptRoot\day09_input.txt) {
+        $LineValues = $Line.Split(" ")
+    
+        # Set direction to move
+        $Y = 0
+        $X = 0
+    
+        switch ($LineValues[0]) {
+            "R" { $X = 1 }
+            "L" { $X = -1 }
+            "U" { $Y = 1 } 
+            "D" { $Y = -1 } 
+        }
+
+        # Repeat movement for number of steps
+        for ($n = 0; $n -lt [int]$LineValues[1]; $n++) {     
+            $Knots[0].Y = $Knots[0].Y + $Y
+            $Knots[0].X = $Knots[0].X + $X
+        
+            # Update position for each knot
+            for ($i = 1; $i -lt $Knots.Count; $i++) {    
+                $DiffY = $Knots[$i - 1].Y - $Knots[$i].Y                        
+                $DiffX = $Knots[$i - 1].X - $Knots[$i].X
+                        
+                if ([Math]::Abs($DiffX) -gt 1 -or [Math]::Abs($DiffY) -gt 1) {          
+                    $Knots[$i].X = $Knots[$($i)].X + [Math]::Sign($DiffX)
+                    $Knots[$i].Y = $Knots[$($i)].Y + [Math]::Sign($DiffY)             
+                }
+            }
+
+            # Add last knot to hash set
+            [void]$Positions.Add("[$($Knots[$($Knots.Count-1)].Y),$($Knots[$($Knots.Count-1)].X)]")
+        }    
+    }
+
+    # Result
+    Write-Host "Part $Part result: $($Positions.Count)"
+}

@@ -1,14 +1,18 @@
 # https://adventofcode.com/2022/day/11
 
+<#
+Not necessary because we already have prime numbers
+
 function Gcd($a, $b) {
     if ($a -eq 0) { $b }
     elseif ($b -eq 0) { $a }
-    else { Gfc -a ($b % $a) -b $a }
+    else { Gcd -a ($b % $a) -b $a }
 }
 
 function Lcm($a, $b) {    
     ($a * $b) / $(Gcd -a $a -b $b)    
 }
+#>
 
 $Text = Get-Content -Path $PSScriptRoot\input.txt
 
@@ -43,7 +47,8 @@ for ($i = 0; $i -lt $Text.Count; $i += 7) {
 $LCM = $Monkeys[0].Test
 
 for ($i = 1; $i -lt $Monkeys.Count; $i++) {
-    $LCM = Lcm -a $LCM -b $Monkeys[$i].Test    
+    #$LCM = Lcm -a $LCM -b $Monkeys[$i].Test
+    $LCM *= $Monkeys[$i].Test
 }
 
 for ($i = 0; $i -lt 10000; $i++) {

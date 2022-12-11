@@ -1,13 +1,13 @@
 # https://adventofcode.com/2022/day/11
 
-function Gfc($a, $b) {
+function Gcd($a, $b) {
     if ($a -eq 0) { $b }
     elseif ($b -eq 0) { $a }
     else { Gfc -a ($b % $a) -b $a }
 }
 
 function Lcm($a, $b) {    
-    ($a * $b) / $(Gfc -a $a -b $b)    
+    ($a * $b) / $(Gcd -a $a -b $b)    
 }
 
 $Text = Get-Content -Path $PSScriptRoot\input.txt

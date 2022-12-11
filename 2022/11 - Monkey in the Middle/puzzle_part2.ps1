@@ -29,11 +29,10 @@ for ($i = 0; $i -lt $Text.Count; $i += 7) {
         })
 }
 
-# Get the Least Common Multiple of all monkeys
-$LCM = $Monkeys[0].Test
+$Mod = $Monkeys[0].Test
 
 for ($i = 1; $i -lt $Monkeys.Count; $i++) {
-    $LCM *= $Monkeys[$i].Test
+    $Mod *= $Monkeys[$i].Test
 }
 
 for ($i = 0; $i -lt 10000; $i++) {
@@ -52,9 +51,8 @@ for ($i = 0; $i -lt 10000; $i++) {
                 "+" { $Result = $Item + $OperationValue }
                 "*" { $Result = $Item * $OperationValue }                
             }
-
-            # Mod by the LCM to get the new worry level and keep the number low
-            $NewWorryLevel = $Result % $LCM
+            
+            $NewWorryLevel = $Result % $Mod
             $NewMonkey = $NewWorryLevel % $Monkey.Test -eq 0 ? $Monkey.NextMonkeyTrue : $Monkey.NextMonkeyFalse
                         
             [void]$Monkeys[$NewMonkey].Items.Add($NewWorryLevel)

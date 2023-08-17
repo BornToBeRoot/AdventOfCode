@@ -1,4 +1,5 @@
 # Advent of Code
 
-[Advent of Code](https://adventofcode.com/) solved with PowerShell.
+- [2022 - PowerShell](2022)
 
+For more details see: https://adventofcode.com/
